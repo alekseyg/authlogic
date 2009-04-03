@@ -3,6 +3,7 @@ require "active_support"
 require File.dirname(__FILE__) + "/authlogic/version"
 require File.dirname(__FILE__) + "/authlogic/i18n"
 require File.dirname(__FILE__) + "/authlogic/random"
+require File.dirname(__FILE__) + "/authlogic/pbkdf2"
 
 require File.dirname(__FILE__) + "/authlogic/controller_adapters/abstract_adapter"
 require File.dirname(__FILE__) + "/authlogic/controller_adapters/rails_adapter" if defined?(Rails)
@@ -13,6 +14,7 @@ require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha1"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha512"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/bcrypt"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/aes256"
+require File.dirname(__FILE__) + "/authlogic/crypto_providers/pbkdf2"
 
 require File.dirname(__FILE__) + "/authlogic/authenticates_many/base"
 require File.dirname(__FILE__) + "/authlogic/authenticates_many/association"
