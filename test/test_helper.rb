@@ -4,6 +4,16 @@ require "ruby-debug"
 require "active_record"
 require "active_record/fixtures"
 
+# A temporary fix to bring active record errors up to speed with rails edge.
+# I need to remove this once the new gem is released. This is only here so my tests pass.
+class ActiveRecord::Errors
+  def [](key)
+    value = on(key)
+    value.is_a?(Array) ? value : [value].compact
+  end
+end
+
+
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
 ActiveRecord::Base.configurations = true
@@ -69,13 +79,32 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :current_login_ip
     t.string    :last_login_ip
   end
+  
+  create_table :affiliates do |t|
+    t.datetime  :created_at      
+    t.datetime  :updated_at
+    t.integer   :company_id
+    t.string    :username
+    t.string    :pw_hash
+    t.string    :pw_salt
+    t.string    :persistence_token
+  end
+  
+  create_table :ldapers do |t|
+    t.datetime  :created_at      
+    t.datetime  :updated_at
+    t.string    :ldap_login
+    t.string    :persistence_token
+  end
 end
 
 require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
 require File.dirname(__FILE__) + '/../lib/authlogic/test_case'
 require File.dirname(__FILE__) + '/libs/project'
+require File.dirname(__FILE__) + '/libs/affiliate'
 require File.dirname(__FILE__) + '/libs/employee'
 require File.dirname(__FILE__) + '/libs/employee_session'
+require File.dirname(__FILE__) + '/libs/ldaper'
 require File.dirname(__FILE__) + '/libs/user'
 require File.dirname(__FILE__) + '/libs/user_session'
 require File.dirname(__FILE__) + '/libs/company'

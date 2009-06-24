@@ -45,26 +45,27 @@ module SessionTest
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
           assert !session.save
-          assert session.errors.on(:password)
+          assert session.errors[:password].size > 0
           assert_equal i + 1, ben.reload.failed_login_count
         end
-      
+        
         session = UserSession.new(:login => ben.login, :password => "badpassword2")
         assert !session.save
-        assert !session.errors.on(:password)
-        assert_equal 2, ben.reload.failed_login_count
+        assert session.errors[:password].size == 0
+        assert_equal 3, ben.reload.failed_login_count
       
         UserSession.consecutive_failed_logins_limit = 50
       end
       
       def test_exceeded_ban_for
         UserSession.consecutive_failed_logins_limit = 2
+        UserSession.generalize_credentials_error_messages true
         ben = users(:ben)
       
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
           assert !session.save
-          assert session.errors.on(:password)
+          assert session.invalid_password?
           assert_equal i + 1, ben.reload.failed_login_count
         end
         
@@ -74,6 +75,7 @@ module SessionTest
         assert_equal 0, ben.reload.failed_login_count
       
         UserSession.consecutive_failed_logins_limit = 50
+        UserSession.generalize_credentials_error_messages false
       end
 
       def test_exceeded_ban_and_failed_doesnt_ban_again
@@ -83,7 +85,7 @@ module SessionTest
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
           assert !session.save
-          assert session.errors.on(:password)
+          assert session.errors[:password].size > 0
           assert_equal i + 1, ben.reload.failed_login_count
         end
         

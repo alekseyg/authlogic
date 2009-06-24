@@ -20,7 +20,7 @@ module Authlogic
         # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> Symbol or String
         def session_key(value = nil)
-          config(:session_key, value, cookie_key)
+          rw_config(:session_key, value, cookie_key)
         end
         alias_method :session_key=, :session_key
       end
@@ -49,7 +49,7 @@ module Authlogic
           def session_key
             build_key(self.class.session_key)
           end
-        
+          
           def update_session
             controller.session[session_key] = record && record.persistence_token
             controller.session["#{session_key}_#{klass.primary_key}"] = record && record.send(record.class.primary_key)

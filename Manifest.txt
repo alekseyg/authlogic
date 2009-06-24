@@ -31,6 +31,7 @@ lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
 lib/authlogic/i18n.rb
 lib/authlogic/random.rb
+lib/authlogic/regex.rb
 lib/authlogic/session/activation.rb
 lib/authlogic/session/active_record_trickery.rb
 lib/authlogic/session/base.rb
@@ -55,12 +56,13 @@ lib/authlogic/session/timeout.rb
 lib/authlogic/session/unauthorized_record.rb
 lib/authlogic/session/validation.rb
 lib/authlogic/test_case.rb
-lib/authlogic/test_case/controller_adapter.rb
 lib/authlogic/test_case/mock_controller.rb
 lib/authlogic/test_case/mock_cookie_jar.rb
 lib/authlogic/test_case/mock_logger.rb
 lib/authlogic/test_case/mock_request.rb
+lib/authlogic/test_case/rails_request_adapter.rb
 lib/authlogic/version.rb
+rails/init.rb
 shoulda_macros/authlogic.rb
 test/acts_as_authentic_test/base_test.rb
 test/acts_as_authentic_test/email_test.rb
@@ -82,9 +84,11 @@ test/fixtures/companies.yml
 test/fixtures/employees.yml
 test/fixtures/projects.yml
 test/fixtures/users.yml
+test/libs/affiliate.rb
 test/libs/company.rb
 test/libs/employee.rb
 test/libs/employee_session.rb
+test/libs/ldaper.rb
 test/libs/ordered_hash.rb
 test/libs/project.rb
 test/libs/user.rb

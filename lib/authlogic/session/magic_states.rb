@@ -30,7 +30,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def disable_magic_states(value = nil)
-          config(:disable_magic_states, value, false)
+          rw_config(:disable_magic_states, value, false)
         end
         alias_method :disable_magic_states=, :disable_magic_states
       end
@@ -46,7 +46,7 @@ module Authlogic
             return true if attempted_record.nil?
             [:active, :approved, :confirmed].each do |required_status|
               if attempted_record.respond_to?("#{required_status}?") && !attempted_record.send("#{required_status}?")
-                errors.add_to_base(I18n.t("error_messages.not_#{required_status}", :default => "Your account is not #{required_status}"))
+                errors.add(:base, I18n.t("error_messages.not_#{required_status}", :default => "Your account is not #{required_status}"))
                 return false
               end
             end

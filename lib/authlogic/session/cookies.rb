@@ -26,7 +26,7 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass_name.underscore}_credentials"
         # * <tt>Accepts:</tt> String
         def cookie_key(value = nil)
-          config(:cookie_key, value, "#{klass_name.underscore}_credentials")
+          rw_config(:cookie_key, value, "#{klass_name.underscore}_credentials")
         end
         alias_method :cookie_key=, :cookie_key
         
@@ -35,7 +35,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def remember_me(value = nil)
-          config(:remember_me, value, false)
+          rw_config(:remember_me, value, false)
         end
         alias_method :remember_me=, :remember_me
         
@@ -44,7 +44,7 @@ module Authlogic
         # * <tt>Default:</tt> 3.months
         # * <tt>Accepts:</tt> Integer, length of time in seconds, such as 60 or 3.months
         def remember_me_for(value = :_read)
-          config(:remember_me_for, value, 3.months, :_read)
+          rw_config(:remember_me_for, value, 3.months, :_read)
         end
         alias_method :remember_me_for=, :remember_me_for
       end
@@ -98,13 +98,15 @@ module Authlogic
           end
           
           def cookie_credentials
-            controller.cookies[cookie_key]
+            controller.cookies[cookie_key] && controller.cookies[cookie_key].split("::")
           end
           
           # Tries to validate the session from information in the cookie
           def persist_by_cookie
-            if cookie_credentials
-              self.unauthorized_record = search_for_record("find_by_persistence_token", cookie_credentials)
+            persistence_token, record_id = cookie_credentials
+            if !persistence_token.nil?
+              record = record_id.nil? ? search_for_record("find_by_persistence_token", persistence_token) : search_for_record("find_by_#{klass.primary_key}", record_id)
+              self.unauthorized_record = record if record && record.persistence_token == persistence_token
               valid?
             else
               false
@@ -113,7 +115,7 @@ module Authlogic
         
           def save_cookie
             controller.cookies[cookie_key] = {
-              :value => record.persistence_token,
+              :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
               :expires => remember_me_until,
               :domain => controller.cookie_domain
             }
