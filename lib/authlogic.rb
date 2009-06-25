@@ -14,6 +14,8 @@ require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha1"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha512"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/bcrypt"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/aes256"
+require File.dirname(__FILE__) + "/authlogic/crypto_providers/pbkdf2/base"
+require File.dirname(__FILE__) + "/authlogic/crypto_providers/pbkdf2/provider"
 
 require File.dirname(__FILE__) + "/authlogic/authenticates_many/base"
 require File.dirname(__FILE__) + "/authlogic/authenticates_many/association"
